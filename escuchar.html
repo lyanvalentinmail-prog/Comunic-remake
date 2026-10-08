@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escuchar</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Archivo JS dedicado para esta página -->
+    <script defer src="escuchar.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="back-button"><i class="fas fa-arrow-left"></i> Regresar</a>
+            <h1>Escuchar</h1>
+        </nav>
+    </header>
+    <main>
+        <div class="page-container">
+            
+            <div class="mic-container">
+                <button id="empezar-escuchar" aria-label="Activar micrófono">
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
+                <p id="estado-escucha">Toca el micrófono para hablar</p>
+            </div>
+            
+            <div id="texto-escuchado-container">
+                <p id="texto-escuchado"></p>
+            </div>
+
+            <div id="historial-container">
+                <div class="historial-header">
+                    <h2>Historial de Escuchas</h2>
+                    <button id="borrar-historial-escuchar-btn" class="hidden"><i class="fas fa-trash"></i> Vaciar</button>
+                </div>
+                <ul id="historial-lista-escuchar"></ul>
+            </div>
+
+        </div>
+    </main>
+</body>
+</html>
