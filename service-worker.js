@@ -1,5 +1,5 @@
 // Incrementa la versión cuando cambien los archivos precargados.
-const CACHE_NAME = 'comunicador-cache-v17';
+const CACHE_NAME = 'comunicador-cache-v18';
 
 const urlsToCache = [
     './',
@@ -20,6 +20,7 @@ const urlsToCache = [
     './styles/pages/pronunciacion.css',
     './styles/pages/usuario.css',
     './scripts/app.js',
+    './scripts/register-service-worker.js',
     './scripts/pages/descripcion.js',
     './scripts/pages/escribir.js',
     './scripts/pages/escuchar.js',
@@ -33,7 +34,10 @@ const urlsToCache = [
     './assets/images/tabletdos.png',
     './assets/audio/correcto.mp3',
     './assets/audio/incorrecto.mp3',
-    './assets/icons/favicon.ico'
+    './assets/icons/favicon.ico',
+    './assets/icons/icon-180.png',
+    './assets/icons/icon-192.png',
+    './assets/icons/icon-512.png'
 ];
 
 self.addEventListener('install', event => {

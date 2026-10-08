@@ -1,6 +1,6 @@
 # Comunicador visual
 
-Aplicación web estática en español para apoyar la comunicación con pictogramas y actividades de escritura, escucha, matemáticas, vocabulario, descripción, pronunciación y perfil de usuario.
+Aplicación web estática en español para apoyar la comunicación con pictogramas y actividades de escritura, escucha, matemáticas, vocabulario, descripción, pronunciación y perfil de usuario. Incluye manifiesto PWA y caché del contenido local para uso básico sin conexión.
 
 ## Estructura
 
@@ -8,13 +8,14 @@ Aplicación web estática en español para apoyar la comunicación con pictogram
 .
 ├── assets/
 │   ├── audio/       # Sonidos de respuesta
-│   ├── icons/       # Favicon
+│   ├── icons/       # Favicon e iconos PWA/iOS
 │   └── images/      # Imágenes locales y marcadores
 ├── data/            # Datos del comunicador (datos.json)
 ├── scripts/
 │   ├── app.js       # Lógica de la pantalla principal
 │   ├── pages/       # Lógica específica de cada actividad
-│   └── vendor/      # Bibliotecas externas
+│   ├── vendor/      # Bibliotecas externas
+│   └── register-service-worker.js
 ├── styles/
 │   ├── global.css   # Estilos compartidos
 │   └── pages/       # Estilos específicos de cada actividad
@@ -23,7 +24,17 @@ Aplicación web estática en español para apoyar la comunicación con pictogram
 └── service-worker.js
 ```
 
-Las páginas HTML permanecen en la raíz para conservar rutas simples y enlaces directos. Los recursos se agrupan por tipo; las rutas de imágenes, estilos, scripts y datos son relativas a la raíz.
+Las páginas HTML permanecen en la raíz para conservar rutas simples. Los recursos se agrupan por tipo y las rutas son relativas a esa raíz, lo que también funciona bajo la ruta de proyecto de GitHub Pages.
+
+## Instalar
+
+La aplicación publicada está en [GitHub Pages](https://lyanvalentinmail-prog.github.io/Comunic-remake/). Ábrela desde un navegador compatible:
+
+- **Android:** Chrome → menú `⋮` → **Instalar app** o **Añadir a pantalla de inicio**.
+- **iPhone/iPad:** Safari → **Compartir** → **Añadir a pantalla de inicio**.
+- **Computadora:** Chrome o Edge → icono **Instalar** en la barra de direcciones o menú del navegador.
+
+Se requiere HTTPS para instalar desde la web; GitHub Pages lo proporciona. El service worker se registra automáticamente y guarda en caché los archivos locales de la aplicación.
 
 ## Ejecutar localmente
 
@@ -34,7 +45,3 @@ python3 -m http.server 8000
 ```
 
 Luego abre `http://localhost:8000`. No se requiere proceso de compilación ni instalación de dependencias.
-
-## Publicar
-
-Se puede publicar como sitio estático desde la raíz del repositorio, por ejemplo con GitHub Pages.
