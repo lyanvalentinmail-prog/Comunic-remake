@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function cargarDatosGlobales() {
         if (!datosGlobales) {
             try {
-                const response = await fetch('datos.json');
+                const response = await fetch('data/datos.json');
                 datosGlobales = await response.json();
             } catch (error) {
                 console.error("Error al cargar datos.json:", error);
@@ -67,8 +67,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function obtenerYCachearPictograma(item) {
         let textoBusqueda = item.texto || item.nombre;
-        if (!textoBusqueda || textoBusqueda.trim() === '') return 'imagenes/placeholder.png';
-        if (!db) return 'imagenes/placeholder.png';
+        if (!textoBusqueda || textoBusqueda.trim() === '') return 'assets/images/placeholder.png';
+        if (!db) return 'assets/images/placeholder.png';
 
         // Limpiamos signos de interrogación para mejorar la búsqueda en ARASAAC
         textoBusqueda = textoBusqueda.replace(/[¿?]/g, '');
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (!responseBusqueda.ok) throw new Error('Error en búsqueda ARASAAC');
             
             const resultados = await responseBusqueda.json();
-            if (resultados.length === 0) return 'imagenes/placeholder.png';
+            if (resultados.length === 0) return 'assets/images/placeholder.png';
             
             const urlImagen = `https://api.arasaac.org/api/pictograms/${resultados[0]._id}?download=false`;
             const response = await fetch(urlImagen); 
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return URL.createObjectURL(imagenBlob);
         } catch (error) {
             console.warn(`No se encontró imagen para: ${textoBusqueda}`);
-            return 'imagenes/placeholder.png';
+            return 'assets/images/placeholder.png';
         }
     }
 
@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         pictoButton.className = `pictograma-button ${claseFitzgerald}`;
 
         const img = document.createElement('img');
-        img.src = 'imagenes/placeholder.png'; // Cargamos placeholder inicial
+        img.src = 'assets/images/placeholder.png'; // Cargamos placeholder inicial
         
         // Empezamos a buscar la imagen real
         obtenerYCachearPictograma(item).then(src => {

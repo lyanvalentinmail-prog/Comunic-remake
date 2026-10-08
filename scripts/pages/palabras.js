@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const pictogramaContainer = document.getElementById('pictograma-container');
         pictogramaContainer.innerHTML = ''; 
 
-        pictogramaImg.src = 'imagenes/placeholder.png'; 
+        pictogramaImg.src = 'assets/images/placeholder.png';
         const urlPicto = await obtenerUrlPictograma(palabraActual.picto);
         pictogramaImg.src = urlPicto;
 
@@ -176,9 +176,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const url = `https://api.arasaac.org/api/pictograms/es/search/${encodeURIComponent(texto)}`;
             const res = await fetch(url);
             const data = await res.json();
-            return data.length > 0 ? `https://api.arasaac.org/api/pictograms/${data[0]._id}` : 'imagenes/placeholder.png';
+            return data.length > 0 ? `https://api.arasaac.org/api/pictograms/${data[0]._id}` : 'assets/images/placeholder.png';
         } catch (error) {
-            return 'imagenes/placeholder.png';
+            return 'assets/images/placeholder.png';
         }
     }
 

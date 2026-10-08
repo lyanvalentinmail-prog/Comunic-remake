@@ -52,9 +52,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 cachePictogramas[palabra] = pictoUrl;
                 return pictoUrl;
             }
-            return 'imagenes/placeholder.png';
+            return 'assets/images/placeholder.png';
         } catch (error) {
-            return 'imagenes/placeholder.png';
+            return 'assets/images/placeholder.png';
         }
     }
 
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
         opcionesContainer.innerHTML = '';
         
         // Estado de carga visual
-        pictogramaImg.src = 'imagenes/placeholder.png';
+        pictogramaImg.src = 'assets/images/placeholder.png';
         pictogramaImg.style.opacity = '0.5';
         
         let palabrasDisponibles = LISTA_PALABRAS.filter(p => !palabrasUsadas.includes(p));

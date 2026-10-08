@@ -45,9 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 cacheMates[palabra] = pictoUrl;
                 return pictoUrl;
             }
-            return 'imagenes/placeholder.png';
+            return 'assets/images/placeholder.png';
         } catch (error) {
-            return 'imagenes/placeholder.png';
+            return 'assets/images/placeholder.png';
         }
     }
 

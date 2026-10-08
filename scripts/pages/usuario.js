@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function mostrarFicha(usuario, adultos) {
-        fotoUsuarioImg.src = usuario.foto || 'imagenes/placeholder.png';
+        fotoUsuarioImg.src = usuario.foto || 'assets/images/placeholder.png';
         nombreCompletoUsuario.textContent = `${usuario.nombre || ''} ${usuario.apellido || ''}`.trim();
         institucionUsuario.textContent = usuario.institucion || 'No especificada';
         direccionUsuario.textContent = usuario.direccion || 'No especificada';
