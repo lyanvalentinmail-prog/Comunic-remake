@@ -1,6 +1,6 @@
 # Comunicador visual
 
-Aplicación web estática en español para apoyar la comunicación con pictogramas y actividades de escritura, escucha, matemáticas, vocabulario, descripción, pronunciación y perfil de usuario. Incluye manifiesto PWA y caché del contenido local para uso básico sin conexión.
+Aplicación web estática en español para apoyar la comunicación con pictogramas y actividades de escritura, escucha, matemáticas, vocabulario, descripción, pronunciación y perfil de usuario. Incluye manifiesto PWA y caché del contenido local para uso básico sin conexión. En la pantalla principal también permite convertir una frase en un archivo WAV con voz sintética en español y compartirlo o descargarlo; no requiere micrófono.
 
 ## Estructura
 
@@ -14,7 +14,7 @@ Aplicación web estática en español para apoyar la comunicación con pictogram
 ├── scripts/
 │   ├── app.js       # Lógica de la pantalla principal
 │   ├── pages/       # Lógica específica de cada actividad
-│   ├── vendor/      # Bibliotecas externas
+│   ├── vendor/      # IndexedDB y motor local de voz
 │   └── register-service-worker.js
 ├── styles/
 │   ├── global.css   # Estilos compartidos
@@ -25,6 +25,10 @@ Aplicación web estática en español para apoyar la comunicación con pictogram
 ```
 
 Las páginas HTML permanecen en la raíz para conservar rutas simples. Los recursos se agrupan por tipo y las rutas son relativas a esa raíz, lo que también funciona bajo la ruta de proyecto de GitHub Pages.
+
+## Compartir audio
+
+En la pantalla principal, pulsa **Audio** para generar un WAV de la frase con una voz sintética en español. Puedes escucharlo antes de compartirlo; si el navegador no permite compartir archivos directamente, se descarga para adjuntarlo manualmente. La voz se genera en el dispositivo y no usa el micrófono ni envía la frase a un servicio externo. El motor meSpeak se distribuye bajo los términos GNU GPL indicados en `scripts/vendor/mespeak/NOTICE.md`.
 
 ## Instalar
 

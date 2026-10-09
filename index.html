@@ -44,11 +44,30 @@
         <!-- Fila 3: Botones de control -->
         <div id="tira-frase-controles" class="hidden">
             <button id="hablar-frase-btn" aria-label="Hablar frase"><i class="fas fa-play"></i> Leer</button>
-            <button id="share-frase-btn" aria-label="Compartir frase"><i class="fas fa-share"></i> Enviar</button>
+            <button id="share-frase-btn" aria-label="Compartir frase como texto"><i class="fas fa-share"></i> Enviar</button>
+            <button id="share-audio-btn" aria-label="Compartir frase como archivo de audio"><i class="fas fa-volume-up"></i> Audio</button>
             <button id="borrar-ultimo-btn" aria-label="Borrar último pictograma"><i class="fas fa-backspace"></i> Atrás</button>
             <button id="borrar-frase-btn" aria-label="Borrar frase completa"><i class="fas fa-trash"></i> Todo</button>
         </div>
     </header>
+
+    <dialog id="audio-share-dialog" class="audio-share-dialog" aria-labelledby="audio-share-title" aria-describedby="audio-share-description">
+        <div class="audio-share-card">
+            <button id="close-audio-share" class="audio-share-close" type="button" aria-label="Cerrar">&times;</button>
+            <h2 id="audio-share-title">Enviar frase por audio</h2>
+            <p id="audio-share-description">Se creará un archivo WAV con una voz sintética en español. No hace falta usar el micrófono.</p>
+            <blockquote id="audio-share-phrase"></blockquote>
+            <button id="generate-audio-btn" class="audio-share-primary" type="button">
+                <i class="fas fa-volume-up"></i> Crear audio
+            </button>
+            <audio id="audio-preview" controls hidden></audio>
+            <p id="audio-share-status" class="audio-share-status" role="status" aria-live="polite">El audio todavía no se ha creado.</p>
+            <div class="audio-share-actions">
+                <button id="share-audio-file-btn" type="button" hidden>Compartir audio</button>
+                <button id="download-audio-btn" type="button" hidden>Descargar WAV</button>
+            </div>
+        </div>
+    </dialog>
 
     <main>
         <!-- PANEL 1: VOCABULARIO FIJO (Compacto arriba) -->

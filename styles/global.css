@@ -141,16 +141,17 @@ header {
 
 #tira-frase-controles {
   display: flex;
-  gap: 6px;
+  gap: 4px;
   padding: 6px 8px;
   background: #f9fafb;
   border-top: 1px solid #e5e7eb;
 }
 
 #tira-frase-controles button {
-  flex: 1;
-  padding: 8px 4px; /* Aumentado para dedos de niños */
-  font-size: 0.9rem;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 8px 2px;
+  font-size: clamp(0.68rem, 2.8vw, 0.9rem);
   font-weight: 600;
   border-radius: 8px;
   border: none;
@@ -158,12 +159,13 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 3px;
   color: white;
 }
 
 #hablar-frase-btn { background-color: var(--color-primario); }
 #share-frase-btn { background-color: #059669; }
+#share-audio-btn { background-color: #7c3aed; }
 #borrar-ultimo-btn { background-color: #d97706; }
 #borrar-frase-btn { background-color: var(--color-borrar); }
 
@@ -522,4 +524,129 @@ footer {
     text-align: center;
     margin: 0;
     word-break: break-word;
+}
+
+/* Compartir una frase como archivo de audio */
+.audio-share-dialog {
+  width: min(460px, calc(100vw - 24px));
+  max-width: none;
+  max-height: calc(100vh - 24px);
+  padding: 0;
+  overflow-y: auto;
+  border: 0;
+  border-radius: 16px;
+  color: var(--color-texto);
+  background: transparent;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.28);
+}
+
+.audio-share-dialog::backdrop {
+  background: rgba(15, 23, 42, 0.62);
+}
+
+.audio-share-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px;
+  background: var(--color-superficie);
+}
+
+.audio-share-card h2 {
+  padding-right: 32px;
+  font-size: 1.35rem;
+}
+
+.audio-share-card p {
+  color: var(--color-texto-secundario);
+  line-height: 1.45;
+}
+
+.audio-share-close {
+  align-self: flex-end;
+  width: 36px;
+  height: 36px;
+  margin-bottom: -42px;
+  border: 0;
+  border-radius: 50%;
+  color: var(--color-texto);
+  background: #eef2f7;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+#audio-share-phrase {
+  padding: 14px;
+  border-left: 4px solid #7c3aed;
+  border-radius: 8px;
+  background: #f3f0ff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+#audio-preview {
+  width: 100%;
+}
+
+.audio-share-status {
+  min-height: 1.4em;
+}
+
+#generate-audio-btn,
+.audio-share-actions button {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 10px;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#generate-audio-btn {
+  background: #7c3aed;
+}
+
+.audio-share-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+#share-audio-file-btn {
+  background: #059669;
+}
+
+#download-audio-btn {
+  background: #1d4ed8;
+}
+
+#share-audio-file-btn[hidden],
+#download-audio-btn[hidden] {
+  display: none;
+}
+
+#generate-audio-btn:disabled,
+.audio-share-actions button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+#generate-audio-btn:focus-visible,
+.audio-share-actions button:focus-visible,
+.audio-share-close:focus-visible {
+  outline: 3px solid #111827;
+  outline-offset: 3px;
+}
+
+@media (max-width: 360px) {
+  .audio-share-card {
+    padding: 18px;
+  }
+
+  .audio-share-actions {
+    grid-template-columns: 1fr;
+  }
 }

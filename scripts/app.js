@@ -402,18 +402,216 @@ document.addEventListener('DOMContentLoaded', async () => {
             actualizarSugerenciasPredictivas(); 
         });
 
+        function obtenerTextoDeFrase() {
+            const texto = fraseActual
+                .map(pictograma => pictograma.hablar || pictograma.texto || pictograma.nombre || '')
+                .filter(Boolean)
+                .join(' ')
+                .trim();
+            return texto ? texto.charAt(0).toLocaleUpperCase('es') + texto.slice(1) : '';
+        }
+
         const shareFraseBtn = document.getElementById('share-frase-btn');
         if (navigator.share && shareFraseBtn) {
             shareFraseBtn.addEventListener('click', async () => {
-                if (fraseActual.length === 0) return;
-                const textoCompleto = fraseActual.map(p => p.hablar || p.texto || p.nombre).join(' ');
-                const textoFinal = textoCompleto.charAt(0).toUpperCase() + textoCompleto.slice(1);
+                const textoFinal = obtenerTextoDeFrase();
+                if (!textoFinal) return;
                 try {
                     await navigator.share({ title: 'Frase desde Mi Comunicador', text: textoFinal });
-                } catch (error) {}
+                } catch (error) {
+                    if (error.name !== 'AbortError') console.error('No se pudo compartir la frase:', error);
+                }
             });
         } else if (shareFraseBtn) {
             shareFraseBtn.style.display = 'none';
         }
+
+        const shareAudioBtn = document.getElementById('share-audio-btn');
+        const audioDialog = document.getElementById('audio-share-dialog');
+        const audioPhrase = document.getElementById('audio-share-phrase');
+        const generateAudioBtn = document.getElementById('generate-audio-btn');
+        const audioPreview = document.getElementById('audio-preview');
+        const audioStatus = document.getElementById('audio-share-status');
+        const shareAudioFileBtn = document.getElementById('share-audio-file-btn');
+        const downloadAudioBtn = document.getElementById('download-audio-btn');
+        const closeAudioBtn = document.getElementById('close-audio-share');
+
+        let speechEnginePromise = null;
+        let generatedAudioBlob = null;
+        let generatedAudioUrl = null;
+        let audioPhraseToShare = '';
+
+        function revokeGeneratedAudio() {
+            if (generatedAudioUrl) {
+                URL.revokeObjectURL(generatedAudioUrl);
+                generatedAudioUrl = null;
+            }
+            generatedAudioBlob = null;
+            if (audioPreview) {
+                audioPreview.pause();
+                audioPreview.removeAttribute('src');
+                audioPreview.hidden = true;
+                audioPreview.load();
+            }
+            if (shareAudioFileBtn) shareAudioFileBtn.hidden = true;
+            if (downloadAudioBtn) downloadAudioBtn.hidden = true;
+        }
+
+        async function cargarMotorDeVoz() {
+            if (!window.meSpeak) {
+                await new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = 'scripts/vendor/mespeak.min.js';
+                    script.onload = resolve;
+                    script.onerror = () => reject(new Error('No se pudo cargar el sintetizador de voz.'));
+                    document.head.appendChild(script);
+                });
+            }
+
+            if (!window.meSpeak.isConfigLoaded()) {
+                const response = await fetch('scripts/vendor/mespeak/mespeak_config.json');
+                if (!response.ok) throw new Error('No se pudo cargar la configuración de voz.');
+                window.meSpeak.loadConfig(await response.json());
+            }
+
+            if (!window.meSpeak.isVoiceLoaded('es-la')) {
+                const response = await fetch('scripts/vendor/mespeak/voices/es-la.json');
+                if (!response.ok) throw new Error('No se pudo cargar la voz en español.');
+                window.meSpeak.loadVoice(await response.json());
+            }
+
+            return window.meSpeak;
+        }
+
+        function obtenerMotorDeVoz() {
+            if (!speechEnginePromise) {
+                speechEnginePromise = cargarMotorDeVoz();
+                speechEnginePromise.catch(() => { speechEnginePromise = null; });
+            }
+            return speechEnginePromise;
+        }
+
+        function abrirDialogoDeAudio() {
+            const texto = obtenerTextoDeFrase();
+            if (!texto || !audioDialog || !audioPhrase) return;
+
+            revokeGeneratedAudio();
+            audioPhraseToShare = texto;
+            audioPhrase.textContent = texto;
+            if (generateAudioBtn) generateAudioBtn.disabled = false;
+            if (audioStatus) audioStatus.textContent = 'Se creará un WAV con voz sintética en español.';
+
+            if (typeof audioDialog.showModal === 'function') {
+                audioDialog.showModal();
+            } else {
+                audioDialog.setAttribute('open', '');
+            }
+            generateAudioBtn?.focus();
+        }
+
+        shareAudioBtn?.addEventListener('click', abrirDialogoDeAudio);
+
+        function cerrarDialogoDeAudio() {
+            if (audioDialog?.open && typeof audioDialog.close === 'function') {
+                audioDialog.close();
+            } else if (audioDialog) {
+                audioDialog.removeAttribute('open');
+                revokeGeneratedAudio();
+            }
+        }
+
+        closeAudioBtn?.addEventListener('click', cerrarDialogoDeAudio);
+        audioDialog?.addEventListener('click', event => {
+            if (event.target === audioDialog) cerrarDialogoDeAudio();
+        });
+        audioDialog?.addEventListener('close', revokeGeneratedAudio);
+
+        generateAudioBtn?.addEventListener('click', async () => {
+            if (!audioPhraseToShare) return;
+            generateAudioBtn.disabled = true;
+            if (audioStatus) audioStatus.textContent = 'Cargando la voz y generando el audio…';
+
+            try {
+                const engine = await obtenerMotorDeVoz();
+                const samples = engine.speak(audioPhraseToShare, {
+                    rawdata: 'array',
+                    voice: 'es-la',
+                    speed: 155,
+                    pitch: 50,
+                    amplitude: 100
+                });
+
+                if (!samples || samples.length < 44) {
+                    throw new Error('El sintetizador no produjo un archivo de audio.');
+                }
+
+                const wavBytes = samples instanceof Uint8Array ? samples : Uint8Array.from(samples);
+                generatedAudioBlob = new Blob([wavBytes], { type: 'audio/wav' });
+                generatedAudioUrl = URL.createObjectURL(generatedAudioBlob);
+                audioPreview.src = generatedAudioUrl;
+                audioPreview.hidden = false;
+                shareAudioFileBtn.hidden = false;
+                downloadAudioBtn.hidden = false;
+                if (audioStatus) audioStatus.textContent = 'Audio listo. Puedes escucharlo, compartirlo o descargarlo.';
+            } catch (error) {
+                console.error('No se pudo generar el audio:', error);
+                if (audioStatus) audioStatus.textContent = 'No se pudo generar el audio. Comprueba los archivos de la app e inténtalo otra vez.';
+            } finally {
+                generateAudioBtn.disabled = false;
+            }
+        });
+
+        function descargarAudioGenerado() {
+            if (!generatedAudioBlob || !generatedAudioUrl) return;
+            const link = document.createElement('a');
+            link.href = generatedAudioUrl;
+            link.download = 'mensaje-comunicador.wav';
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        }
+
+        downloadAudioBtn?.addEventListener('click', () => {
+            descargarAudioGenerado();
+            if (audioStatus) audioStatus.textContent = 'WAV descargado. Ya puedes adjuntarlo en WhatsApp u otra aplicación.';
+        });
+
+        shareAudioFileBtn?.addEventListener('click', async () => {
+            if (!generatedAudioBlob) return;
+
+            if (typeof File === 'undefined' || !navigator.share || !navigator.canShare) {
+                descargarAudioGenerado();
+                if (audioStatus) audioStatus.textContent = 'Este navegador no comparte archivos directamente. Descargué el WAV para que puedas adjuntarlo en el chat.';
+                return;
+            }
+
+            const audioFile = new File([generatedAudioBlob], 'mensaje-comunicador.wav', {
+                type: 'audio/wav',
+                lastModified: Date.now()
+            });
+
+            try {
+                if (!navigator.canShare({ files: [audioFile] })) {
+                    descargarAudioGenerado();
+                    if (audioStatus) audioStatus.textContent = 'Este navegador no comparte archivos directamente. Descargué el WAV para que puedas adjuntarlo en el chat.';
+                    return;
+                }
+
+                await navigator.share({
+                    title: 'Mensaje de voz desde ComuniC',
+                    text: audioPhraseToShare,
+                    files: [audioFile]
+                });
+                if (audioStatus) audioStatus.textContent = 'Audio compartido.';
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    if (audioStatus) audioStatus.textContent = 'Compartir cancelado. El audio sigue listo.';
+                } else {
+                    console.error('No se pudo compartir el archivo de audio:', error);
+                    descargarAudioGenerado();
+                    if (audioStatus) audioStatus.textContent = 'No se pudo abrir el menú para compartir. Descargué el WAV para que puedas adjuntarlo.';
+                }
+            }
+        });
     }
 });

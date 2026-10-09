@@ -1,5 +1,5 @@
 // Incrementa la versión cuando cambien los archivos precargados.
-const CACHE_NAME = 'comunicador-cache-v18';
+const CACHE_NAME = 'comunicador-cache-v19';
 
 const urlsToCache = [
     './',
@@ -29,6 +29,9 @@ const urlsToCache = [
     './scripts/pages/pronunciacion.js',
     './scripts/pages/usuario.js',
     './scripts/vendor/idb.min.js',
+    './scripts/vendor/mespeak.min.js',
+    './scripts/vendor/mespeak/mespeak_config.json',
+    './scripts/vendor/mespeak/voices/es-la.json',
     './assets/images/placeholder.png',
     './assets/images/qtabletdos.png',
     './assets/images/tabletdos.png',
