@@ -42,13 +42,14 @@
         </div>
 
         <!-- Fila 3: Botones de control -->
-        <div id="tira-frase-controles" class="hidden">
-            <button id="hablar-frase-btn" aria-label="Hablar frase"><i class="fas fa-play"></i> Leer</button>
-            <button id="share-frase-btn" aria-label="Compartir frase como texto"><i class="fas fa-share"></i> Enviar</button>
-            <button id="share-audio-btn" aria-label="Compartir frase como archivo de audio"><i class="fas fa-volume-up"></i> Audio</button>
-            <button id="borrar-ultimo-btn" aria-label="Borrar último pictograma"><i class="fas fa-backspace"></i> Atrás</button>
-            <button id="borrar-frase-btn" aria-label="Borrar frase completa"><i class="fas fa-trash"></i> Todo</button>
+        <div id="tira-frase-controles">
+            <button id="hablar-frase-btn" aria-label="Hablar frase" disabled><i class="fas fa-play"></i> Leer</button>
+            <button id="share-frase-btn" aria-label="Compartir frase como texto" disabled><i class="fas fa-share"></i> Enviar</button>
+            <button id="share-audio-btn" aria-label="Compartir frase como archivo de audio" disabled><i class="fas fa-volume-up"></i> Audio</button>
+            <button id="borrar-ultimo-btn" aria-label="Borrar último pictograma" disabled><i class="fas fa-backspace"></i> Atrás</button>
+            <button id="borrar-frase-btn" aria-label="Borrar frase completa" disabled><i class="fas fa-trash"></i> Todo</button>
         </div>
+        <p id="frase-actions-hint" class="frase-actions-hint" aria-live="polite">Elige pictogramas para activar los controles y crear un audio.</p>
     </header>
 
     <dialog id="audio-share-dialog" class="audio-share-dialog" aria-labelledby="audio-share-title" aria-describedby="audio-share-description">

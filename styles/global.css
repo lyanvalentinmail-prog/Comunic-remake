@@ -169,6 +169,18 @@ header {
 #borrar-ultimo-btn { background-color: #d97706; }
 #borrar-frase-btn { background-color: var(--color-borrar); }
 
+#tira-frase-controles button:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+.frase-actions-hint {
+  padding: 0 12px 7px;
+  color: var(--color-texto-secundario);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
 /* ========================================= */
 /* MAIN Y PANELES (ESPACIO OPTIMIZADO) */
 /* ========================================= */

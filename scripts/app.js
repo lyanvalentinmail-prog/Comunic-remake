@@ -255,12 +255,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (fraseActual.length === 0) {
             tiraFraseContainer.classList.add('hidden');
             tiraFraseContainerText.classList.add('hidden');
-            tiraFraseControles.classList.add('hidden');
         } else {
             tiraFraseContainer.classList.remove('hidden');
             tiraFraseContainerText.classList.remove('hidden');
-            tiraFraseControles.classList.remove('hidden');
         }
+
+        // Mantiene el botón de audio visible, pero evita compartir una frase vacía.
+        tiraFraseControles?.classList.remove('hidden');
+        tiraFraseControles?.querySelectorAll('button').forEach(button => {
+            button.disabled = fraseActual.length === 0;
+        });
+        document.getElementById('frase-actions-hint')?.classList.toggle('hidden', fraseActual.length > 0);
     }
 
     function inicializarDragAndDrop() {

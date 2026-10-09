@@ -1,5 +1,5 @@
 // Incrementa la versión cuando cambien los archivos precargados.
-const CACHE_NAME = 'comunicador-cache-v19';
+const CACHE_NAME = 'comunicador-cache-v20';
 
 const urlsToCache = [
     './',
